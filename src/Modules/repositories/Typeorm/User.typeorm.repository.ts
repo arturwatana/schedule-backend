@@ -12,4 +12,15 @@ export class UserTypeORMRepository implements IUserRepository {
   showAll(): Promise<User[]> {
     return this.userRepository.find();
   }
+  async findByEmail(email: string): Promise<User | null> {
+    const user = await this.userRepository.findOneBy({
+      email,
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
 }
