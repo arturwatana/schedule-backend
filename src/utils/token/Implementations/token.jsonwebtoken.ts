@@ -13,6 +13,11 @@ export class JWTToken implements IToken {
     return token;
   }
   validate(token: string): boolean {
-    throw new Error("Method not implemented.");
+    try {
+      const isValid = verify(token, this.SECRET_TOKEN);
+      return true;
+    } catch (err: any) {
+      return false;
+    }
   }
 }

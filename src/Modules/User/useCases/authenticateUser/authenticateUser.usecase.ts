@@ -9,7 +9,7 @@ export class AuthenticateUserUseCase {
     private passwordHash: IPasswordHash
   ) {}
 
-  async execute(email: string, password: string): Promise<string> {
+  async execute(email: string, password: string) {
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
       throw new Error("Usuário ou senha invalidos");
@@ -24,6 +24,11 @@ export class AuthenticateUserUseCase {
     }
 
     const token = this.token.create(user);
-    return token;
+    const userAuthenticated = {
+      email: user.email,
+      fullName: user.fullName,
+      token,
+    };
+    return userAuthenticated;
   }
 }
