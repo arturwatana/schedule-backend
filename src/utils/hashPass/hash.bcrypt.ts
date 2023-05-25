@@ -8,7 +8,6 @@ export class PasswordBcryptHash implements IPasswordHash {
   }
   async compare(password: string, passwordHashed: string): Promise<boolean> {
     const isEqual = await bcrypt.compare(password, passwordHashed);
-    console.log(isEqual);
     return isEqual;
   }
 }
