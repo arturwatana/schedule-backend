@@ -10,4 +10,12 @@ export class TaskTypeORMRepository implements ITaskRepository {
     const createdTask = await this.taskRepository.save(data);
     return createdTask;
   }
+  async findAllByUserEmail(userEmail: string): Promise<Task[]> {
+    const userTasks = await this.taskRepository.find({
+      where: {
+        userEmail: userEmail,
+      },
+    });
+    return userTasks;
+  }
 }
