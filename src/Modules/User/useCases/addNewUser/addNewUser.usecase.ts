@@ -2,14 +2,14 @@ import { IPasswordHash } from "../../../../utils/hashPass/interface/IPasswordHas
 import { IUserRepository } from "../../../repositories/IUserRepository.interface";
 import { User } from "../../entities/User.entity";
 import { IUser } from "../../interfaces/IUser.interface";
-
+0;
 export class AddNewUserUseCase {
   constructor(
     private userRepository: IUserRepository,
     private passwordHash: IPasswordHash
   ) {}
 
-  async execute(data: IUser): Promise<User> {
+  async execute(data: IUser) {
     const userAlreadyExists = await this.userRepository.findByEmail(data.email);
     if (userAlreadyExists) {
       throw new Error(`User ${data.email} already exists`);
@@ -18,6 +18,10 @@ export class AddNewUserUseCase {
     const passwordHash = await this.passwordHash.hash(user.password);
     user.password = passwordHash;
     const createdUser = await this.userRepository.save(user);
-    return createdUser;
+    const responseUser = {
+      fullName: createdUser.fullName,
+      email: createdUser.email,
+    };
+    return responseUser;
   }
 }

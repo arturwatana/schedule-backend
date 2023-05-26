@@ -6,18 +6,18 @@ export const ensureAuthenticated = (
   res: Response,
   next: NextFunction
 ) => {
-  const headerAuth = req.headers.authorization;
+  const headerAuth = req.headers.authentication?.toString();
 
   if (!headerAuth) {
     return res.status(401).json({
-      message: "Ops, paprece que voce ainda nao efetuou o login",
+      message: "Ops, parece que voce ainda nao efetuou o login",
     });
   }
   const [, token] = headerAuth.split(" ");
 
   if (!token) {
     return res.status(401).json({
-      message: "Ops, paprece que voce ainda nao efetuou o login",
+      message: "Ops, parece que voce ainda nao efetuou o login",
     });
   }
   const verifyIfTokenIsValid = new JWTToken().validate(token);
