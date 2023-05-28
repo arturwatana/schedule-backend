@@ -18,4 +18,40 @@ export class TaskTypeORMRepository implements ITaskRepository {
     });
     return userTasks;
   }
+  async updateTask(task: Task): Promise<void> {
+    await this.taskRepository
+      .createQueryBuilder()
+      .update(TypeORMTask)
+      .set({
+        name: task.name,
+        urgency: task.urgency,
+        endDate: task.endDate,
+      })
+      .where({
+        id: task.id,
+      })
+      .execute();
+  }
+  async findTaskById(id: string): Promise<Task> {
+    const taskInDB = await this.taskRepository.find({
+      where: {
+        id,
+      },
+    });
+    if (!taskInDB) {
+      throw new Error("Task not found");
+    }
+
+    return taskInDB[0];
+  }
+  async deleteTask(id: string): Promise<void> {
+    await this.taskRepository
+      .createQueryBuilder()
+      .delete()
+      .from(TypeORMTask)
+      .where({
+        id,
+      })
+      .execute();
+  }
 }
