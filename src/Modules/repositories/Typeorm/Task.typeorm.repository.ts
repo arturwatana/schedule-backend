@@ -26,14 +26,40 @@ export class TaskTypeORMRepository implements ITaskRepository {
         name: task.name,
         urgency: task.urgency,
         endDate: task.endDate,
+        description: task.description,
       })
       .where({
         id: task.id,
       })
       .execute();
   }
+
+  async confirmTask(id: string) {
+    const task = await this.taskRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!task) {
+      throw new Error("Task not found");
+    }
+    if (task.completed === "Concluida") {
+      throw new Error("Task already completed");
+    }
+    task.completed = "Concluida";
+    await this.taskRepository
+      .createQueryBuilder()
+      .update(TypeORMTask)
+      .set(task)
+      .where({
+        id,
+      })
+      .execute();
+
+    return task;
+  }
   async findTaskById(id: string): Promise<Task> {
-    const taskInDB = await this.taskRepository.find({
+    const taskInDB = await this.taskRepository.findOne({
       where: {
         id,
       },
@@ -42,7 +68,7 @@ export class TaskTypeORMRepository implements ITaskRepository {
       throw new Error("Task not found");
     }
 
-    return taskInDB[0];
+    return taskInDB;
   }
   async deleteTask(id: string): Promise<void> {
     await this.taskRepository

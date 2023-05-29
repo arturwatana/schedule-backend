@@ -5,6 +5,7 @@ import findTasksByUserEmailController from "../Modules/Task/useCases/findTasksBy
 import editTaskController from "../Modules/Task/useCases/editTask";
 import { TaskTypeORMRepository } from "../Modules/repositories/Typeorm/Task.typeorm.repository";
 import deleteTaskController from "../Modules/Task/useCases/deleteTask";
+import completeTaskController from "../Modules/Task/useCases/completeTask";
 
 export const taskRoutes = Router();
 const taskRepository = new TaskTypeORMRepository();
@@ -18,15 +19,9 @@ taskRoutes.get("/tasks/:email", ensureAuthenticated, (req, res) => {
 taskRoutes.put("/tasks/:id", ensureAuthenticated, (req, res) => {
   editTaskController.handle(req, res);
 });
-taskRoutes.get("/tasks/:id", ensureAuthenticated, async (req, res) => {
-  const { id } = req.params;
-  const taskInDb = await taskRepository.findTaskById(id);
-  if (taskInDb) {
-    res.status(200).json(taskInDb);
-  }
-  res.status(400).json({ message: "Task not found" });
+taskRoutes.put("/tasks/:id/completed", ensureAuthenticated, (req, res) => {
+  completeTaskController.handle(req, res);
 });
-
 taskRoutes.delete("/tasks/:id", ensureAuthenticated, (req, res) => {
   deleteTaskController.handle(req, res);
 });
