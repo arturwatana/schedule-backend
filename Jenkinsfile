@@ -3,9 +3,11 @@
 pipeline {
     agent any
     stages {
-        stage("Primeiro passo"){
+        stage("Build project Image"){
             steps{
-                echo "Primeiro deploy com jenkins"
+                script {
+                    dockerapp = docker.build("schedulee/schedule", "-f ./Dockerfile ./")
+                }
             }
         }
     }
