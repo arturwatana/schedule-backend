@@ -16,7 +16,7 @@ AppDataSource.initialize()
     app.use(userRoutes);
     app.use(taskRoutes);
     app.listen(8080, () => {
-      console.log("Listening on port 8080");
+      console.log("Listening on AWS");
     });
   })
   .catch((error) => console.log(error));
